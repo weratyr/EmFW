@@ -1,0 +1,8 @@
+#.cproject
+#.project
+.qnx_internal.mk
+/bin
+common.mk
+misc/
+x86/
+

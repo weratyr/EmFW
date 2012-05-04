@@ -142,13 +142,19 @@ void CAdminComponent::init(void)
 	 */
 		//DEBUG_PRINT("INPUTCOMPONENTE WIRD ERZEUGT!");
 
-		CKeyboardCaptureThread keyboard;
-				CThread KeyboardComponent_thread(keyboard,
-						CContext::getInputContext().getContextNamePtr(),
-						CContext::DEFAULT_STACK_SIZE, CContext::DEFAULT_PRIORITY,
-						CContext::DEFAULT_AFFINITY, false);
-				KeyboardComponent_thread.start();
+//		CKeyboardCaptureThread keyboard;
+//				CThread KeyboardComponent_thread(keyboard,
+//						CContext::getInputContext().getContextNamePtr(),
+//						CContext::DEFAULT_STACK_SIZE, CContext::DEFAULT_PRIORITY,
+//						CContext::DEFAULT_AFFINITY, false);
+//				KeyboardComponent_thread.start();
 
+		CMiniComDriver miniComDriver;
+		CThread miniComDriver_thread(miniComDriver,
+				CContext::getInputContext().getContextNamePtr(),
+				CContext::DEFAULT_STACK_SIZE, CContext::DEFAULT_PRIORITY,
+				CContext::DEFAULT_AFFINITY, false);
+		miniComDriver_thread.start();
 
 		CInputComponent input(CContext::getInputContext());
 		CThread InputComponent_thread(input,
@@ -241,7 +247,7 @@ void CAdminComponent::run(void)
 	//	}
 	#endif
 
-	sleep(20);
+	sleep(60);
 
 	terminationHandler(0);
 

@@ -29,6 +29,15 @@
 #ifndef _ACOMPONENTBASE_H
    #include "AComponentBase.h"
 #endif
+#ifndef _CMESSAGE_H
+	#include "CMessage.h"
+#endif
+#ifndef H_EVENTS
+	#include "Events.h"
+#endif
+#ifndef _CCONTEXT_H
+	#include "CContext.h"
+#endif
 
 class CTunerComponent: public AComponentBase
 {

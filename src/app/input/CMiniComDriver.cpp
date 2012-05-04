@@ -34,3 +34,8 @@ CMiniComDriver::~CMiniComDriver() {
 	if (mMiniCom != NULL)
 		delete mMiniCom;
 }
+
+void CMiniComDriver::run()
+{
+	mMiniCom->run();
+}

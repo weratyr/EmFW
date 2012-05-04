@@ -120,11 +120,18 @@ void CMiniCommander::sendKey(CommanderKeyCode keyValue) {
 	 * send this with the given keyValue to the component
 	 * which should show a reaction of the keyValue
 	 */
+
+	CMessage msg(CMessage::Key_Event_Type);
+	msg.setSenderID(INPUT_INDEX);
+	msg.setReceiverID(HMI_INDEX);
+	msg.setOpcode(keyValue);
+	CContext::getMDispContext().getNormalQueue().add(msg, false); // send out
+
 }
 
 //TODO prio 3 :: errorhandling if no stx/etx is received or more/less than 12 bytes are received
 void CMiniCommander::recieve() {
-	DEBUG_PRINT("Enter")
+	DEBUG_PRINT("Enter");
 		char data[12]; //normally one of our packets contains 12 chars
 		int numChars = 0;
 		char stxCount = 0;
@@ -133,7 +140,7 @@ void CMiniCommander::recieve() {
 
 		mRecBlock.reset();
 
-		DEBUG_PRINT("Start reading")
+		DEBUG_PRINT("Start reading");
 		while (1) {
 
 			numChars=read(mFD, &data,12);////normally one of our packets contains 12 chars
@@ -150,7 +157,7 @@ void CMiniCommander::recieve() {
 				if (data[i] == ETX) {
 					etxCount++;
 					if (stxCount < etxCount) {
-						DEBUG_PRINT("Bad Packet!")
+						DEBUG_PRINT("Bad Packet!");
 						// We have a packet without start. Probably we did not
 						// receive the beginning of the packet
 						// Throw it away
@@ -162,7 +169,7 @@ void CMiniCommander::recieve() {
 
 			if (etxCount > 0) {
 				if (stxCount > 0) {
-					DEBUG_PRINT("Start interpret telegram")
+					DEBUG_PRINT("Start interpret telegram");
 					interpretTelegram();
 					etxCount--;
 					stxCount--;
@@ -350,7 +357,7 @@ void CMiniCommander::interpretTelegram() {
 		}
 		break;
 	default: // Unknown command
-		DEBUG_PRINT("Unknown command received")
+		DEBUG_PRINT("Unknown command received");
 		break;
 
 	}

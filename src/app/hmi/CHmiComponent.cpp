@@ -25,6 +25,8 @@
 
 #include "CHmiComponent.h"
 
+CommanderKeyCode currentState = MC_SOFT_A_SHORT;
+
 CHmiComponent::CHmiComponent(CComponentContext& theContext) :
 	AComponentBase(theContext)
 {
@@ -84,46 +86,110 @@ void CHmiComponent::handleMessage(const CMessage& msg) {
 }
 
 void CHmiComponent::handleKeyEvent(const CMessage& _m) {
-	const IcmKeyCode keycode = (IcmKeyCode) _m.getOpcode(); // could be used for giving the 'x times-pressed' count
+	//const IcmKeyCode keycode = (IcmKeyCode) _m.getOpcode(); // could be used for giving the 'x times-pressed' count
+
+	const CommanderKeyCode keycode = (CommanderKeyCode) _m.getOpcode();
+
 	//DEBUG_PRINT("Key Event Type switch  - ------ - - - --");
-	switch (keycode) {
-	case CD_KEY: {
-		DEBUG_PRINT("CD KEY  - ------ - - - --");
 
-		/* HINWEIS:
-		 *
-		 * Switch the current display by sending a message
-		 * to the GL component and setting its parameters in
-		 * the DC.
-		 */
+	if(strlen((char*) _m.getParam4()) > 0)
+	{
+
+		//DEBUG_PRINT("KEYCODE: %d", keycode);
+
 		CMessage msg(CMessage::Key_Event_Type);
 				msg.setSenderID(HMI_INDEX);
 				msg.setReceiverID(OpenGL_INDEX);
-				msg.setOpcode(CD_KEY);
+				Int8* text = (Int8*) _m.getParam4();
+				msg.setParam4(text, strlen((char*) text));
+				msg.setOpcode(_m.getOpcode());
 				CContext::getMDispContext().getNormalQueue().add(msg, false);
 
+
+
+
+
 	}
-		break;
+	else
+	{
+		switch (keycode) {
+		case MC_SOFT_A_SHORT: {
+			DEBUG_PRINT("MC_SOFT_A_SHORT  - ------ - - - --");
 
-	case TUNER_KEY: {
-		DEBUG_PRINT("TUNER KEY  - ------ - - - --");
+			/* HINWEIS:
+			 *
+			 * Switch the current display by sending a message
+			 * to the GL component and setting its parameters in
+			 * the DC.
+			 */
+			CMessage msg(CMessage::Key_Event_Type);
+					msg.setSenderID(HMI_INDEX);
+					msg.setReceiverID(TUNER_INDEX);
+					msg.setOpcode(MC_SOFT_A_SHORT);
+					CContext::getMDispContext().getNormalQueue().add(msg, false);
+					currentState = (CommanderKeyCode) msg.getOpcode();
 
-		/* HINWEIS:
-		 *
-		 * Switch the current display by sending a message
-		 * to the GL component and setting its parameters in
-		 * the DC.
-		 */
-		CMessage msg(CMessage::Key_Event_Type);
-				msg.setSenderID(HMI_INDEX);
-				msg.setReceiverID(OpenGL_INDEX);
-				msg.setOpcode(TUNER_KEY);
-				CContext::getMDispContext().getNormalQueue().add(msg, false);
-	}
-		break;
+		}
+			break;
 
-	default:
-		DEBUG_PRINT("UNKNOWN KEY  - ------ - - - --");
-		break;
+		case MC_SOFT_B_SHORT: {
+			DEBUG_PRINT("MC_SOFT_B_SHORT  - ------ - - - --");
+
+			CMessage msg(CMessage::Key_Event_Type);
+					msg.setSenderID(HMI_INDEX);
+					msg.setReceiverID(CD_INDEX);
+					msg.setOpcode(MC_SOFT_B_SHORT);
+					CContext::getMDispContext().getNormalQueue().add(msg, false);
+					currentState = (CommanderKeyCode) msg.getOpcode();
+		}
+			break;
+
+			/*
+			 * TUNER 	GRÜN 	A
+			 * CD 		ROT 	B
+			 */
+
+		case MC_SOFT_ROTARY_RIGHT_UNPRESSED: {
+
+			if(currentState == MC_SOFT_A_SHORT) {
+				DEBUG_PRINT("MC_SOFT_ROTARY_RIGHT_UNPRESSED  - ------ - - - --");
+
+				CMessage msg(CMessage::Key_Event_Type);
+						msg.setSenderID(HMI_INDEX);
+						msg.setReceiverID(TUNER_INDEX);
+						msg.setOpcode(MC_SOFT_ROTARY_RIGHT_UNPRESSED);
+						CContext::getMDispContext().getNormalQueue().add(msg, false);
+			} else if(currentState == MC_SOFT_B_SHORT) {
+				CMessage msg(CMessage::Key_Event_Type);
+						msg.setSenderID(HMI_INDEX);
+						msg.setReceiverID(CD_INDEX);
+						msg.setOpcode(MC_SOFT_ROTARY_RIGHT_UNPRESSED);
+						CContext::getMDispContext().getNormalQueue().add(msg, false);
+			}
+		}
+				break;
+		case MC_SOFT_ROTARY_LEFT_UNPRESSED: {
+
+			if(currentState == MC_SOFT_A_SHORT) {
+				DEBUG_PRINT("MC_SOFT_ROTARY_LEFT_UNPRESSED  - ------ - - - --");
+
+				CMessage msg(CMessage::Key_Event_Type);
+						msg.setSenderID(HMI_INDEX);
+						msg.setReceiverID(TUNER_INDEX);
+						msg.setOpcode(MC_SOFT_ROTARY_LEFT_UNPRESSED);
+						CContext::getMDispContext().getNormalQueue().add(msg, false);
+			} else if(currentState == MC_SOFT_B_SHORT) {
+				CMessage msg(CMessage::Key_Event_Type);
+						msg.setSenderID(HMI_INDEX);
+						msg.setReceiverID(CD_INDEX);
+						msg.setOpcode(MC_SOFT_ROTARY_LEFT_UNPRESSED);
+						CContext::getMDispContext().getNormalQueue().add(msg, false);
+			}
+		}
+				break;
+		default:
+			DEBUG_PRINT("UNKNOWN KEY  - ------ - - - --");
+			break;
+		}
 	}
 }

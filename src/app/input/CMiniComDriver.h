@@ -42,11 +42,22 @@
  * TODO
  * create a concrete object from well known interfaces
  */
-class CMiniComDriver
+class CMiniComDriver : public IRunnable
 {
 public:
 	CMiniComDriver();
 	virtual ~CMiniComDriver();
+
+	/**
+	 * Implement IRunnable interface
+	 */
+	virtual void init(){}
+	virtual void run();
+	virtual void stop(){}
+	virtual void cleanup() {}
+	virtual void prepareForShutdown() {}
+	virtual void reRun() {}
+	virtual void goToStandby() {}
 
 private:
    CMiniCommander* mMiniCom;

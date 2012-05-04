@@ -52,5 +52,14 @@ void CCdComponent::run(void)
 
 void CCdComponent::handleMessage(const CMessage& msg)
 {
+
 	DEBUG_PRINT("%s handle message", mContext.getContextNamePtr());
+
+	CMessage msg2(CMessage::Key_Event_Type);
+					msg2.setSenderID(CD_INDEX);
+					msg2.setReceiverID(HMI_INDEX);
+					msg2.setOpcode(msg.getOpcode());
+					Int8* text = (Int8*) "CD Bereit";
+					msg2.setParam4(text, strlen((char*) text));
+					CContext::getMDispContext().getNormalQueue().add(msg2, false);
 }

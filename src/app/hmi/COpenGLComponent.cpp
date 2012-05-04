@@ -46,7 +46,10 @@ AGraphicsDriver* COpenGLComponent::graphics = NULL;
 int width = WINDOW_WIDTH;
 int height = WINDOW_HEIGHT;
 
-Int32 keycode;
+CommanderKeyCode keycode;
+CommanderKeyCode currState;
+int volume = 10;
+int scan = 100;
 
 // +++++ content +++++
 // draw a rectangle in the middle of viewport:
@@ -98,7 +101,8 @@ void COpenGLComponent::run()
 
 void COpenGLComponent::handleMessage(const CMessage & msg)
 {
-	keycode = msg.getOpcode();
+	//keycode = msg.getOpcode();
+	keycode = (CommanderKeyCode) msg.getOpcode();
 	COpenGLComponent::graphics->run();
 
 }
@@ -133,22 +137,71 @@ void COpenGLComponent::draw()
 	// draw some text below and above the pane
 	char msg[80];
 
+	DEBUG_PRINT("KEYCODE: %d", keycode);
+
 	switch (keycode) {
-	case CD_KEY: {
-		DEBUG_PRINT("CD KEY  - ------ - - - -- OPENGL");
-		glColor4f(1.0, 0.0, 0.0, 1.0);
-		sprintf(msg, "CD is Working");
-		DEBUG_PRINT("color is red --- CD is Working");
+	/*
+	* TUNER 	GRÜN 	A
+	* CD 		ROT 	B
+	*/
 
-	}
-		break;
 
-	case TUNER_KEY: {
+
+	case MC_SOFT_A_SHORT: {
 		DEBUG_PRINT("TUNER KEY  - ------ - - - -- OPENGL");
 		glColor4f(0.0, 1.0, 0.0, 1.0);
 		sprintf(msg, "TUNER is Working");
 		DEBUG_PRINT("color is green --- TUNER is Working");
+
+		currState = MC_SOFT_A_SHORT;
 	}
+		break;
+	case MC_SOFT_B_SHORT: {
+			DEBUG_PRINT("CD KEY  - ------ - - - -- OPENGL");
+			glColor4f(1.0, 0.0, 0.0, 1.0);
+			sprintf(msg, "CD is Working");
+			DEBUG_PRINT("color is red --- CD is Working");
+
+			currState = MC_SOFT_B_SHORT;
+		}
+		break;
+	case MC_SOFT_ROTARY_RIGHT_UNPRESSED: {
+		if(currState == MC_SOFT_A_SHORT)
+		{
+			DEBUG_PRINT("TUNER KEY  - ------ - - - -- OPENGL");
+			glColor4f(0.0, 1.0, 0.0, 1.0);
+			scan++;
+			sprintf(msg, "TUNER SCAN: %d", scan);
+			DEBUG_PRINT("color is green --- TUNER is Working");
+		} else if(currState == MC_SOFT_B_SHORT)
+		{
+			DEBUG_PRINT("CD KEY  - ------ - - - -- OPENGL");
+			glColor4f(1.0, 0.0, 0.0, 1.0);
+			volume++;
+			sprintf(msg, "CD VOLUME: %d", volume);
+			DEBUG_PRINT("color is red --- CD is Working");
+		}
+
+		}
+		break;
+	case MC_SOFT_ROTARY_LEFT_UNPRESSED: {
+		if(currState == MC_SOFT_A_SHORT)
+		{
+			DEBUG_PRINT("TUNER KEY  - ------ - - - -- OPENGL");
+			glColor4f(0.0, 1.0, 0.0, 1.0);
+			scan--;
+			sprintf(msg, "TUNER SCAN: %d", scan);
+			DEBUG_PRINT("color is green --- TUNER is Working");
+		} else if(currState == MC_SOFT_B_SHORT)
+		{
+			DEBUG_PRINT("CD KEY  - ------ - - - -- OPENGL");
+			glColor4f(1.0, 0.0, 0.0, 1.0);
+			volume--;
+			sprintf(msg, "CD VOLUME: %d", volume);
+			DEBUG_PRINT("color is red --- CD is Working");
+		}
+
+		}
 		break;
 
 	default:

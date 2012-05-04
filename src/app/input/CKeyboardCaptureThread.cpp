@@ -27,6 +27,7 @@
 
 void CKeyboardCaptureThread::run()
 {
+	DEBUG_PRINT("key-input captured Thread ------");
 	while(true)
 	{
 		// read: "character + ENTER" (blocked reading!)

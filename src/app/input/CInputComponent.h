@@ -29,6 +29,9 @@
 #ifndef _ACOMPONENTBASE_H
 	#include "AComponentBase.h"
 #endif
+#ifndef _CKEYBOARDCAPTURETHREAD_H
+	#include"CKeyboardCaptureThread.h"
+#endif
 
 class CInputComponent : public AComponentBase
 {

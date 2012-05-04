@@ -140,13 +140,24 @@ void CAdminComponent::init(void)
 	 * TODO
 	 * create a input component with all needed input-types
 	 */
-		CInputComponent input(CContext::getInputContext());
+		//DEBUG_PRINT("INPUTCOMPONENTE WIRD ERZEUGT!");
 
-			CThread InputComponent_thread(input,
-					CContext::getInputContext().getContextNamePtr(),
-					CContext::INPUT_STACK_SIZE, CContext::INPUT_PRIORITY,
-					CContext::INPUT_AFFINITY, true);
-			InputComponent_thread.start();
+		CKeyboardCaptureThread keyboard;
+				CThread KeyboardComponent_thread(keyboard,
+						CContext::getInputContext().getContextNamePtr(),
+						CContext::DEFAULT_STACK_SIZE, CContext::DEFAULT_PRIORITY,
+						CContext::DEFAULT_AFFINITY, false);
+				KeyboardComponent_thread.start();
+
+
+		CInputComponent input(CContext::getInputContext());
+		CThread InputComponent_thread(input,
+				CContext::getInputContext().getContextNamePtr(),
+				CContext::INPUT_STACK_SIZE, CContext::INPUT_PRIORITY,
+				CContext::INPUT_AFFINITY, true);
+		InputComponent_thread.start();
+
+
 
 	}
 	DEBUG_PRINT("creation of components done");
@@ -187,6 +198,7 @@ void CAdminComponent::run(void)
 			 */
 
 			// e.g. switch to tuner panel after 7 seconds (only works if open gl is running)
+			/*
 			sleep(7);
 			CMessage msg(CMessage::Key_Event_Type);
 			msg.setSenderID(ADMIN_INDEX);
@@ -209,6 +221,7 @@ void CAdminComponent::run(void)
 			msg3.setOpcode(TUNER_KEY);
 			CContext::getMDispContext().getNormalQueue().add(msg3, false); // send out
 			sleep(3);
+			*/
 			/*
 			 * now send cyclic (3x) dummy-messages to all other components
 			 */
@@ -227,6 +240,8 @@ void CAdminComponent::run(void)
 //			}
 	//	}
 	#endif
+
+	sleep(20);
 
 	terminationHandler(0);
 

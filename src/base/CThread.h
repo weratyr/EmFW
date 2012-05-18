@@ -66,6 +66,8 @@
 #endif
 #ifdef __QNX__
 	#include <sys/neutrino.h>
+	#include <sys/syspage.h>
+	#include <stdlib.h>
 #endif
 #include <errno.h>
 #include <unistd.h>
@@ -81,6 +83,7 @@
 //============================================================
 // CLASS DEFINITION
 //============================================================
+
 
 
 /**

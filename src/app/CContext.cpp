@@ -74,8 +74,8 @@ const CThread::EPriority CContext::DEFAULT_PRIORITY = CThread::PRIORITY_NORM;
  */
 const Int32 CContext::ADMIN_AFFINITY = 0;
 const Int32 CContext::MDISP_AFFINITY = 0;
-const Int32 CContext::HMI_AFFINITY = 0;
-const Int32 CContext::GL_AFFINITY = 0;
+const Int32 CContext::HMI_AFFINITY = 1;
+const Int32 CContext::GL_AFFINITY = 1;
 const Int32 CContext::TUNER_AFFINITY = 0;
 const Int32 CContext::NAVI_AFFINITY = 0;
 const Int32 CContext::GPS_AFFINITY = 0;

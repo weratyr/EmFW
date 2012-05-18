@@ -74,14 +74,14 @@ const CThread::EPriority CContext::DEFAULT_PRIORITY = CThread::PRIORITY_NORM;
  */
 const Int32 CContext::ADMIN_AFFINITY = 0;
 const Int32 CContext::MDISP_AFFINITY = 0;
-const Int32 CContext::HMI_AFFINITY = 1;
-const Int32 CContext::GL_AFFINITY = 1;
-const Int32 CContext::TUNER_AFFINITY = 0;
-const Int32 CContext::NAVI_AFFINITY = 0;
-const Int32 CContext::GPS_AFFINITY = 0;
-const Int32 CContext::CD_AFFINITY = 0;
-const Int32 CContext::INPUT_AFFINITY = 0;
-const Int32 CContext::DEFAULT_AFFINITY = 0;
+const Int32 CContext::HMI_AFFINITY = 2;
+const Int32 CContext::GL_AFFINITY = 2;
+const Int32 CContext::TUNER_AFFINITY = 1;
+const Int32 CContext::NAVI_AFFINITY = 1;
+const Int32 CContext::GPS_AFFINITY = 3;
+const Int32 CContext::CD_AFFINITY = 1;
+const Int32 CContext::INPUT_AFFINITY = 1;
+const Int32 CContext::DEFAULT_AFFINITY = 3;
 
 const Int32 ADMIN_NORMALQUEUESIZE = 100; // Number of Messages
 const Int32 MDISP_NORMALQUEUESIZE = 100;

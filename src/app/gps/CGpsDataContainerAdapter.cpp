@@ -49,149 +49,23 @@ UInt32	CGpsDataContainerAdapter::getTimestamp() const
 {
 	GpsData gpsData;
 	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.timestamp;
+	return gpsData.timestamp_usec;
 }
-UInt8	CGpsDataContainerAdapter::getState() const
-{
+
+void CGpsDataContainerAdapter::setLatitude(double const lat){
 	GpsData gpsData;
 	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.state;
+	gpsData.latitude=lat * 1000000;
+	mActualGpsDC.setGpsData(gpsData);
 }
-UInt8	CGpsDataContainerAdapter::getFlags() const
-{
+
+void CGpsDataContainerAdapter::setLongitude(double const lon){
 	GpsData gpsData;
 	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.flags;
+	gpsData.longitude=lon * 1000000;
+	mActualGpsDC.setGpsData(gpsData);
 }
-UInt8	CGpsDataContainerAdapter::getAntennaState() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.antennaState;
-}
-UInt8	CGpsDataContainerAdapter::getSignalQuality() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.signalQuality;
-}
-Int32	CGpsDataContainerAdapter::getHeight() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.height;
-}
-UInt32	CGpsDataContainerAdapter::getSpeed() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.speed;
-}
-UInt16	CGpsDataContainerAdapter::getHeading() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.heading;
-}
-UInt16	CGpsDataContainerAdapter::getYear() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.year;
-}
-UInt8	CGpsDataContainerAdapter::getMonth() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.month;
-}
-UInt8	CGpsDataContainerAdapter::getDay() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.day;
-}
-UInt8	CGpsDataContainerAdapter::getUtcHour() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.utc_hour;
-}
-UInt8	CGpsDataContainerAdapter::getUtcMinute() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.utc_minute;
-}
-UInt8	CGpsDataContainerAdapter::getUtcSecond() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.utc_second;
-}
-UInt8	CGpsDataContainerAdapter::getFix() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.fix;
-}
-UInt16	CGpsDataContainerAdapter::getHdop() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.hdop;
-}
-UInt16	CGpsDataContainerAdapter::getPdop() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.pdop;
-}
-UInt16	CGpsDataContainerAdapter::getVdop() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.vdop;
-}
-UInt16	CGpsDataContainerAdapter::getSatUsed() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.sat_used;
-}
-UInt16	CGpsDataContainerAdapter::getSatVisi() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.sat_visi;
-}
-UInt16	CGpsDataContainerAdapter::getHoriPosErr() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.hori_pos_err;
-}
-UInt16	CGpsDataContainerAdapter::getVertPosErr() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.vert_pos_err;
-}
-UInt16	CGpsDataContainerAdapter::getNorthSpeed() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.north_speed;
-}
-UInt16	CGpsDataContainerAdapter::getEastSpeed() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.east_speed;
-}
-UInt16	CGpsDataContainerAdapter::getVertSpeed() const
-{
-	GpsData gpsData;
-	mActualGpsDC.getGpsData(gpsData);
-	return gpsData.vert_speed;
+
+void CGpsDataContainerAdapter::getActualGpsData(GpsData &gpsdata){
+	mActualGpsDC.getGpsData(gpsdata);
 }

@@ -29,12 +29,6 @@
 #ifndef _ACOMPONENTBASE_H
 	#include "AComponentBase.h"
 #endif
-#ifndef _CKEYBOARDCAPTURETHREAD_H
-	#include"CKeyboardCaptureThread.h"
-#endif
-#ifndef _CMINICOMDRIVER_H
-	#include"CMiniComDriver.h"
-#endif
 
 class CInputComponent : public AComponentBase
 {

@@ -80,17 +80,15 @@ void CAdminComponent::init(void)
 	else if ((mProcessIDs[HMI_INDEX] = fork()) == 0)
 	{
 		/*
-		 * TODO
-		 * start a OpenGL thread for graphics in HMI process
+		 * GL thread for graphics
 		 */
-
-		COpenGLComponent opengl(CContext::getGLContext());
-				CThread COpenGLComponent_thread(opengl,
-						CContext::getGLContext().getContextNamePtr(),
-						CContext::GL_STACK_SIZE, CContext::GL_PRIORITY,
-						CContext::GL_AFFINITY, false);
-				COpenGLComponent_thread.start();
-
+		COpenGLComponent glComponent(CContext::getGLContext());
+		CThread GLThread(glComponent,
+				CContext::getGLContext().getContextNamePtr(),
+				CContext::GL_STACK_SIZE,
+				CContext::GL_PRIORITY,
+				CContext::GL_AFFINITY, false);
+		GLThread.start();
 
 		CHmiComponent hmi(CContext::getHMIContext());
 		CThread CHmiComponent_thread(hmi,
@@ -117,15 +115,26 @@ void CAdminComponent::init(void)
 				CContext::NAVI_AFFINITY, true);
 		CNaviComponent_thread.start();
 	}
-//	else if ((mProcessIDs[GPS_INDEX] = fork()) == 0)
-//	{
-//		CGpsComponent gps(CContext::getGpsContext());
-//		CThread CGpsComponent_thread(gps,
-//				CContext::getGpsContext().getContextNamePtr(),
-//				CContext::GPS_STACK_SIZE, CContext::GPS_PRIORITY,
-//				CContext::GPS_AFFINITY, true);
-//		CGpsComponent_thread.start();
-//	}
+	else if ((mProcessIDs[GPS_INDEX] = fork()) == 0)
+	{
+		CGpsComponent gps(CContext::getGpsContext());
+		CThread CGpsComponent_thread(gps,
+				CContext::getGpsContext().getContextNamePtr(),
+				CContext::GPS_STACK_SIZE, CContext::GPS_PRIORITY,
+				CContext::GPS_AFFINITY, true);
+		CGpsComponent_thread.start();
+	}
+
+	else if ((mProcessIDs[GPSFILEPARSER_INDEX] = fork()) == 0){
+		char pFilename[1024];
+		strcpy(pFilename, GPS_CAN_LOGFILE);
+		CGpsFileParserComponent gpsfp(CContext::getGpsFileParserContext(), pFilename);
+		CThread CGpsFileParserComponent_thread(gpsfp,
+				CContext::getGpsFileParserContext().getContextNamePtr(),
+				CContext::GPSFILEPARSER_STACK_SIZE, CContext::GPSFILEPARSER_PRIORITY,
+				CContext::GPSFILEPARSER_AFFINITY, true);
+		CGpsFileParserComponent_thread.start();
+	}
 	else if ((mProcessIDs[CD_INDEX] = fork()) == 0)
 	{
 		CCdComponent cd(CContext::getCdContext());
@@ -134,38 +143,38 @@ void CAdminComponent::init(void)
 				CContext::CD_STACK_SIZE, CContext::CD_PRIORITY,
 				CContext::CD_AFFINITY, true);
 		CCdComponent_thread.start();
-	} else if((mProcessIDs[INPUT_INDEX] = fork()) == 0)
+	}
+	else if ((mProcessIDs[INPUT_INDEX] = fork()) == 0)
 	{
-	/*
-	 * TODO
-	 * create a input component with all needed input-types
-	 */
-		//DEBUG_PRINT("INPUTCOMPONENTE WIRD ERZEUGT!");
-
-//		CKeyboardCaptureThread keyboard;
-//				CThread KeyboardComponent_thread(keyboard,
-//						CContext::getInputContext().getContextNamePtr(),
-//						CContext::DEFAULT_STACK_SIZE, CContext::DEFAULT_PRIORITY,
-//						CContext::DEFAULT_AFFINITY, false);
-//				KeyboardComponent_thread.start();
-
+		/*
+		 * MiniComDevice thread
+		 */
 		CMiniComDriver miniComDriver;
-		CThread miniComDriver_thread(miniComDriver,
-				CContext::getInputContext().getContextNamePtr(),
+		CThread miniComDriverThread(miniComDriver, "miniComDriver",
 				CContext::DEFAULT_STACK_SIZE, CContext::DEFAULT_PRIORITY,
-				CContext::DEFAULT_AFFINITY, false);
-		miniComDriver_thread.start();
+				CContext::INPUT_AFFINITY, false);
+		miniComDriverThread.start();
 
+		/*
+		 * Keyboard thread
+		 */
+		CKeyboardCaptureThread keyboard;
+		CThread KeyThread(keyboard, "KeyboardThread",
+				CContext::DEFAULT_STACK_SIZE, CContext::DEFAULT_PRIORITY,
+				CContext::INPUT_AFFINITY, false);
+		KeyThread.start();
+
+		/*
+		 * Input-Component as main-thread
+		 */
 		CInputComponent input(CContext::getInputContext());
-		CThread InputComponent_thread(input,
+		CThread CInputComponent_thread(input,
 				CContext::getInputContext().getContextNamePtr(),
 				CContext::INPUT_STACK_SIZE, CContext::INPUT_PRIORITY,
 				CContext::INPUT_AFFINITY, true);
-		InputComponent_thread.start();
-
-
-
+		CInputComponent_thread.start();
 	}
+
 	DEBUG_PRINT("creation of components done");
 
 	setSignalHandler();
@@ -190,64 +199,15 @@ void CAdminComponent::run(void)
 		CThread::sleep(seconds_to_wait * 1000);
 
 	#else
-		/* regular/normal implementierung of admin-component
-		 * is to dispatch in an endless loop
+		/* regulaere/normale Implementierung der Admin:
+		 *
+		 * die Admin dispatcht in einer Endlos-Schleife
 		 */
-		//while (getRun()) {
-			//DEBUG_PRINT("%s dispatch loop", mContext.getContextNamePtr());
-			//mDispatcher.dispatch(true);*/
-
-
-			/*
-			 * TODO
-			 * remove this code and include regular admin-implementation
-			 */
-
-			// e.g. switch to tuner panel after 7 seconds (only works if open gl is running)
-			/*
-			sleep(7);
-			CMessage msg(CMessage::Key_Event_Type);
-			msg.setSenderID(ADMIN_INDEX);
-			msg.setReceiverID(HMI_INDEX);
-			msg.setOpcode(TUNER_KEY);
-			CContext::getMDispContext().getNormalQueue().add(msg, false); // send out
-			sleep(3);
-
-			DEBUG_PRINT("ADMIN: switched to Tuner done................ now Cd!!!!!!!!!!!!!");
-			CMessage msg2(CMessage::Key_Event_Type);
-			msg2.setSenderID(ADMIN_INDEX);
-			msg2.setReceiverID(HMI_INDEX);
-			msg2.setOpcode(CD_KEY);
-			CContext::getMDispContext().getNormalQueue().add(msg2, false); // send out
-			sleep(3);
-
-			CMessage msg3(CMessage::Key_Event_Type);
-			msg3.setSenderID(ADMIN_INDEX);
-			msg3.setReceiverID(HMI_INDEX);
-			msg3.setOpcode(TUNER_KEY);
-			CContext::getMDispContext().getNormalQueue().add(msg3, false); // send out
-			sleep(3);
-			*/
-			/*
-			 * now send cyclic (3x) dummy-messages to all other components
-			 */
-//			int cycles = 3;
-//			CMessage msg4(CMessage::Internal_App_Type);
-//			msg4.setSenderID(ADMIN_INDEX);
-//			msg4.setOpcode(ADMIN_TYPE);
-//			for (UInt8 i = 0; i < cycles; i++)
-//			{
-//				for (int compIDX = HMI_INDEX; compIDX < NUM_OF_COMPONENTS; compIDX++)
-//				{
-//					msg4.setReceiverID(compIDX);
-//					CContext::getMDispContext().getNormalQueue().add(msg4, false);
-//					CThread::sleep(1000); //milliSek
-//				}
-//			}
-	//	}
+		while (getRun()) {
+			DEBUG_PRINT("%s dispatch loop", mContext.getContextNamePtr());
+			mDispatcher.dispatch(true);
+		}
 	#endif
-
-	sleep(60);
 
 	terminationHandler(0);
 

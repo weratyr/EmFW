@@ -34,6 +34,10 @@
 	#include "CContext.h"
 #endif
 
+#ifndef _ACOMPONENTBASE_H
+	#include "AComponentBase.h"
+#endif
+
 #ifndef AGRAPHICSDRIVER_H_
 	#include "AGraphicsDriver.h"
 #endif
@@ -42,22 +46,19 @@
 	#include "GraphicsIncludes.h"
 #endif
 
-#ifndef _ACOMPONENTBASE_H
-	#include "AComponentBase.h"
+#ifndef CGPSDATACONTAINERADAPTER_H_
+	#include "CGpsDataContainerAdapter.h"
 #endif
 
-#ifndef _CDISPATCHER_H
-	#include "CDispatcher.h"
+#ifndef CMAPVIEWER_H_
+	#include "CMapViewer.h"
 #endif
 
-#ifndef H_EVENTS
-	#include "Events.h"
-#endif
-
-class COpenGLComponent: public AComponentBase
+class COpenGLComponent : public AComponentBase
 {
 	public:
 		COpenGLComponent(CComponentContext& theContext);
+
 
 		//overwrite functions from base class
 		virtual void init();
@@ -75,6 +76,8 @@ class COpenGLComponent: public AComponentBase
 
 		static CDispatcher* mCurrentDispatcher;
 		static AGraphicsDriver* graphics;
+		
+		static CMapViewer* mMapViewer;
 };
 
 #endif // _COPENGLCOMPONENT_H

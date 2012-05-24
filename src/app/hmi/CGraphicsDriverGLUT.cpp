@@ -35,7 +35,12 @@ void CGraphicsDriverGLUT::init()
 	DEBUG_PRINT("entered")
 	int dummy = 0;
 	glutInit(&dummy, NULL);
-	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+	
+	/*
+	 * origin framework
+	 * */
+	
+/*	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 	glutInitWindowSize(getWindowWidth(), getWindowHeight());
 	glutCreateWindow("OpenGLdemo");
 
@@ -50,7 +55,40 @@ void CGraphicsDriverGLUT::init()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glOrtho(0, getWindowWidth(), 0, getWindowHeight(), 0, 100);
+	glOrtho(0, getWindowWidth(), 0, getWindowHeight(), 0, 100);*/
+
+	/*
+	 * import from MapViewer source (COpenGL::init())
+	 */
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+
+	glutInitWindowSize(getWindowWidth(), getWindowHeight());
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE);
+	glutInitWindowPosition(100, 100);
+	
+	glutCreateWindow( "OSM" );
+   
+	//glClearColor(1.0, 1.0, 1.0, 0.0);
+	glClearColor(0.45, 0.43, 0.41, 0.0);
+	//glShadeModel(GL_SMOOTH);
+//	glEnable( GL_VERTEX_ARRAY );		// to do wofuer
+	//glEnable( GL_BLEND );
+	//glEnable(GL_LINE_SMOOTH);
+	glEnable(GL_DEPTH_TEST);
+	
+	glClearDepth(1.0);
+	glDepthFunc(GL_LESS);
+
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	glViewport(0, 0, getWindowWidth(), getWindowHeight());
+	glMatrixMode( GL_PROJECTION );
+	glLoadIdentity();
+	   
+   	glOrtho( -getWindowWidth()/2.0f, getWindowWidth()/2.0f, -getWindowHeight()/2.0f, getWindowHeight()/2.0f, -100.0f, 100.0f );      // Origin = center
+	  	    
+	glTranslatef(0,0,-50);
+	glMatrixMode(GL_MODELVIEW);
 }
 
 void CGraphicsDriverGLUT::run()

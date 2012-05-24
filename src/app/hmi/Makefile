@@ -31,7 +31,12 @@ OBJS = $$BINDIR/CHmiComponent.o \
 	$$BINDIR/CFTRender.o \
 	$$BINDIR/CHMIGUIImage.o \
 	$$BINDIR/CHMIGUIImageDesc.o \
-	$$BINDIR/COpenGLComponent.o
+	$$BINDIR/COpenGLComponent.o \
+	$$BINDIR/CPosition.o \
+	$$BINDIR/FileParser.o \
+	$$BINDIR/CBounds.o \
+	$$BINDIR/CMapViewer.o
+
 
 ifeq ($(TARGET), LINUX_X86) 
 	OBJS += $$BINDIR/CGraphicsDriverGLUT.o 
@@ -45,6 +50,7 @@ ifeq ($(TARGET), QNX_SH4)
 	OBJS += $$BINDIR/CGraphicsDriverGFX.o
 endif # QNX_SH4
 
+include $(PROJECT_ROOT)/src/buildmacros.mk 
 include $(PROJECT_ROOT)/src/componenttargets.mk
 
 all: build_objs

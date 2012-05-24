@@ -30,10 +30,14 @@ CGpsDataContainerAccessor::CGpsDataContainerAccessor(CGpsDataContainer& containe
 {
 }
 
-CGpsDataContainerAccessor::~CGpsDataContainerAccessor() {
-	// TODO Auto-generated destructor stub
+CGpsDataContainerAccessor::~CGpsDataContainerAccessor()
+{
 }
 void CGpsDataContainerAccessor::setActualGpsData(const GpsData& aGpsData)
 {
 	mActualGpsDC.setGpsData(aGpsData);
 }
+void CGpsDataContainerAccessor::releaseNextGpsData(){
+	mActualGpsDC.releaseNextGpsData();
+}
+

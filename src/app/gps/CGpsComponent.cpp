@@ -21,26 +21,13 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
-*****************************************************************************/
+ *****************************************************************************/
 
 #include "CGpsComponent.h"
 
-CGpsSystem* CGpsComponent::sGpsSystem =NULL;
-
 CGpsComponent::CGpsComponent(CComponentContext& theContext) :
-	AComponentBase(theContext),
-	mDevice(GPS_DEVICE),
-	mGpsDCAccessor(static_cast<CGpsDataContainer&>(theContext.getContainer()))
-{
+		AComponentBase(theContext), mGpsDCAccessor(static_cast<CGpsDataContainer&>(CContext::getGpsContext().getContainer()))  {
 	mDispatcher.setHandler(*this);
-
-	#ifdef TARGET_D1
-		static CGpsSystemQnxSh4 gpsSystem(GPS_DEVICE);
-	#else
-		static CGpsSystemNMEA gpsSystem(GPS_DEVICE);
-	#endif
-
-	sGpsSystem=&gpsSystem;
 }
 
 CGpsComponent::~CGpsComponent() {
@@ -48,37 +35,20 @@ CGpsComponent::~CGpsComponent() {
 }
 
 void CGpsComponent::init(void) {
-
-	sGpsSystem->init();
-
 	DEBUG_PRINT("entered");
 }
 
 void CGpsComponent::run(void) {
-	if(!sGpsSystem->isInitialized()) {
-		DEBUG_PRINT("GPS not initialized. Exiting...");
-		return;
-	}
-	while (true) {
-		if (0 == sGpsSystem->readGpsData(mGpsData) ) {
-			this->updateGpsDC();
-			this->sendPositionMessage();
-		}
-	}
 }
 
 void CGpsComponent::sendPositionMessage() {
 	CMessage msg(CMessage::Internal_App_Type);
 	msg.setSenderID(GPS_INDEX);
-	msg.setReceiverID(NAVI_INDEX);
+	msg.setReceiverID(HMI_INDEX);
 	msg.setOpcode(POSITION_DATA);
 	CContext::getMDispContext().getNormalQueue().add(msg, false);
 }
 
 void CGpsComponent::handleMessage(const CMessage& msg) {
 
-}
-
-void CGpsComponent::updateGpsDC() {
-	mGpsDCAccessor.setActualGpsData(mGpsData);
 }

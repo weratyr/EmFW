@@ -36,35 +36,14 @@ public:
 	virtual ~CGpsDataContainerAdapter();
 
 	UInt32	getTimestamp() const;
-	UInt8	getState() const;
-	UInt8	getFlags() const;
-	UInt8	getAntennaState() const;
-	UInt8	getSignalQuality() const;
-	Int32	getHeight() const;
-	UInt32	getSpeed() const;
-	UInt16	getHeading() const;
-	UInt16	getYear() const;
-	UInt8	getMonth() const;
-	UInt8	getDay() const;
-	UInt8	getUtcHour() const;
-	UInt8	getUtcMinute() const;
-	UInt8	getUtcSecond() const;
-	UInt8	getFix() const;
-	UInt16	getHdop() const;
-	UInt16	getPdop() const;
-	UInt16	getVdop() const;
-	UInt16	getSatUsed() const;
-	UInt16	getSatVisi() const;
-	UInt16	getHoriPosErr() const;
-	UInt16	getVertPosErr() const;
-	UInt16	getNorthSpeed() const;
-	UInt16	getEastSpeed() const;
-	UInt16	getVertSpeed() const;
 	double getLatitude()const;
 	double getLongitude()const;
-
+	void setLatitude(double const);
+	void setLongitude(double const );
+	void getActualGpsData(GpsData&);
 private:
 	CGpsDataContainer& mActualGpsDC;
+
 };
 
 #endif /* CGPSDATACONTAINERADAPTER_H_ */

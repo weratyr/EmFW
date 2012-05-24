@@ -40,11 +40,6 @@ pthread_once_t CThread::sInit = PTHREAD_ONCE_INIT;
 Int32          CThread::sIndex = 0;
 
 
-unsigned    num_elements = 0;
-int         *rsizep, masksize_bytes, size;
-int    *rmaskp, *imaskp;
-void        *my_data;
-
 //============================================================
 // Implementation
 //============================================================
@@ -64,55 +59,23 @@ void init(void)
 void bindToCPU(Int32 cpu, const char* name)
 {
 	#ifdef __QNX__
-
-	/* Determine the number of array elements required to hold
-	 * the runmasks, based on the number of CPUs in the system. */
-	num_elements = RMSK_SIZE(_syspage_ptr->num_cpu);
-
-	/* Determine the size of the runmask, in bytes. */
-	masksize_bytes = num_elements * sizeof(unsigned);
-
-	/* Allocate memory for the data structure that we'll pass
-	 * to ThreadCtl(). We need space for an integer (the number
-	 * of elements in each mask array) and the two masks
-	 * (runmask and inherit mask). */
-
-	size = sizeof(int) + 2 * masksize_bytes;
-	if ((my_data = malloc(size)) == NULL) {
-	    /* Not enough memory. */
-
-	} else {
-	    memset(my_data, 0x00, size);
-
-	    /* Set up pointers to the "members" of the structure. */
-	    rsizep = (int *)my_data;
-	    rmaskp = rsizep + 1;
-	    imaskp = rmaskp + num_elements;
-
-	    /* Set the size. */
-	    *rsizep = num_elements;
-
-	    /* Set the runmask. Call this macro once for each processor
-	       the thread can run on. */
-	    RMSK_SET(cpu, rmaskp);
-
-	    /* Set the inherit mask. Call this macro once for each processor
-	       the thread's children can run on. */
-	    RMSK_SET(cpu, imaskp);
-
-
-	if ( ThreadCtl( _NTO_TCTL_RUNMASK_GET_AND_SET_INHERIT,
-	                   my_data) == -1) {
-	        DEBUG_PRINT("Thread Control Start-Error ---------------");
-	    }
-	}
-
-		//TODO use fuction ThreadCtl( int cmd, void * data ) to control the thread with a runmask, see QNX library reference
-		DEBUG_PRINT("WARNING: bind thread [%s] with pid=%d to cpu=%d failed - not implemented yet in qnx ",name, getpid(), cpu);
-
+		int runmask = 1 << cpu;
+		if (ThreadCtl(_NTO_TCTL_RUNMASK, (int*) runmask) == -1)
 	#elif __linux__
-		//TODO use struct cpu_set_t, for documentation visit http://www.ibm.com/developerworks/linux/library/l-affinity.html
-		DEBUG_PRINT("WARNING: bind thread [%s] with pid=%d to cpu=%d failed - not implemented yet in qnx ",name, getpid(), cpu);
+		// for documentation visit http://www.ibm.com/developerworks/linux/library/l-affinity.html
+		cpu_set_t runmask;
+		CPU_ZERO( &runmask );
+		CPU_SET( cpu, &runmask );
+		if( sched_setaffinity(0, sizeof(runmask), &runmask) == -1 )
+	#endif
+		{
+			DEBUG_PRINT("failed to bind thread [%s] with pid=%d to cpu=%d (%s)",name, getpid(), cpu, strerror(errno));
+		}
+	#ifdef DEBUG_MODE
+		else
+		{
+			DEBUG_PRINT("bind thread [%s] with pid=%d - tid=%d to cpu=%d",name, getpid(), (int)pthread_self(),cpu);
+		}
 	#endif
 }
 
@@ -249,9 +212,7 @@ void CThread::start(void)
 #endif
 
    		// set main thread's affinity
-   		//...
-		// bind to cpu
-		bindToCPU(mAffinity, mName);
+   		bindToCPU(mAffinity, mName);
 
    		run();
    }

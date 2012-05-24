@@ -34,30 +34,32 @@
 #ifndef _CMINICOMDRIVER_H
 #define _CMINICOMDRIVER_H
 
+
+#ifndef _IRUNNABLE_H
+#include "IRunnable.h"
+#endif
+#ifndef _CMESSAGE_H
+#include "CMessage.h"
+#endif
 #ifndef _CMINICOMMANDER_H
 #include "CMiniCommander.h"
 #endif
 
-/*
- * TODO
- * create a concrete object from well known interfaces
- */
 class CMiniComDriver : public IRunnable
 {
 public:
 	CMiniComDriver();
 	virtual ~CMiniComDriver();
 
-	/**
-	 * Implement IRunnable interface
-	 */
-	virtual void init(){}
-	virtual void run();
-	virtual void stop(){}
-	virtual void cleanup() {}
-	virtual void prepareForShutdown() {}
-	virtual void reRun() {}
-	virtual void goToStandby() {}
+	virtual void init(void){}
+	virtual void run(void);
+	virtual void stop(void);
+	virtual void cleanup(void){}
+	virtual void reRun();
+	virtual void prepareForShutdown(){}
+	virtual void goToStandby(){}
+
+	virtual void handleMessage(const CMessage& msg);
 
 private:
    CMiniCommander* mMiniCom;

@@ -38,13 +38,11 @@ CInputComponent::~CInputComponent()
 
 void CInputComponent::init()
 {
-	DEBUG_PRINT("INPUT INIT ----------------------------");
 
 }
 
 void CInputComponent::run()
 {
-	DEBUG_PRINT("INPUT RUN ----------------------------");
 	while(getRun())
 	{
 		DEBUG_PRINT("%s dispatch loop", mContext.getContextNamePtr());

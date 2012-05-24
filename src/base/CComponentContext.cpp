@@ -43,7 +43,8 @@ CComponentContext CComponentContext::createComponentContext(
                                           Int32 normalQueueSize,
                                           Int32 systemQueueSize,
                                           Int32 internalQueueSize,
-										  Int32 DCSize)
+										  Int32 DCSize,
+										  void (*createDC)(Int8*))
 {
    CComponentContext ComponentenContext;
    ComponentenContext.mContextNamePtr = contextNamePtr;
@@ -63,6 +64,7 @@ CComponentContext CComponentContext::createComponentContext(
 
    // and DCs (only memory pointer is set - content has to be initialized later @see CContext.cpp)
    ComponentenContext.mDCPtr = reinterpret_cast<CContainer*>(memPtr);
+   (*createDC)(memPtr);
    memPtr += DCSize;
    return ComponentenContext;
 }

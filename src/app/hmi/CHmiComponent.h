@@ -37,6 +37,10 @@
 	#include "AComponentBase.h"
 #endif
 
+#ifndef CGPSDATACONTAINERADAPTER_H_
+	#include "CGpsDataContainerAdapter.h"
+#endif
+
 #ifndef H_EVENTS
 	#include "Events.h"
 #endif
@@ -54,6 +58,10 @@ class CHmiComponent: public AComponentBase
    virtual void handleMessage(const CMessage& msg);
 
    void handleKeyEvent(const CMessage& msg);
+ private:
+   CGpsDataContainerAdapter mGpsDCAccessor;
+   GpsData gpsdata;
+   Int32 opcode;
 
 };
 

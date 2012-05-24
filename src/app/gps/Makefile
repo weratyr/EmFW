@@ -27,16 +27,11 @@
 ###############################################################################
 
 OBJS = $$BINDIR/CGpsComponent.o \
+	$$BINDIR/CGpsFileParserComponent.o \
 	$$BINDIR/CGpsDataContainerAccessor.o \
 	$$BINDIR/CGpsDataContainerAdapter.o \
 	$$BINDIR/CGpsDataContainer.o \
-	$$BINDIR/CGpsSystem.o
-
-ifeq ($(TARGET), QNX_SH4) 
-	OBJS += $$BINDIR/CGpsSystemQnxSh4.o
-else
-	OBJS += $$BINDIR/CGpsSystemNMEA.o 
-endif
+	$$BINDIR/CGpsNMEAParser.o
 
 include $(PROJECT_ROOT)/src/componenttargets.mk
 

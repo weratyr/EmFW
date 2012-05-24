@@ -35,6 +35,7 @@ public:
 	CGpsDataContainerAccessor(CGpsDataContainer&);
 	virtual ~CGpsDataContainerAccessor();
 	void setActualGpsData(const GpsData&);
+	void releaseNextGpsData();
 private:
 	CGpsDataContainer& mActualGpsDC;
 };

@@ -76,6 +76,7 @@ enum Component_Index
 	TUNER_INDEX,
 	NAVI_INDEX,
 	GPS_INDEX,
+	GPSFILEPARSER_INDEX,
 	CD_INDEX,
 	INPUT_INDEX,
 	/**
@@ -101,6 +102,8 @@ enum Component_Index
 		Int32 mDCSize;
 		Int32 mWatchdogLimit;						// Initial limit for watchdog
 
+		void (*createDC)(Int8* ptr);
+
 		Int32 mContextSize;							// size needed in shared mem.
 	};
 
@@ -118,9 +121,21 @@ class CContext
 	static CComponentContext& getTunerContext(void);
 	static CComponentContext& getNaviContext(void);
 	static CComponentContext& getGpsContext(void);
+	static CComponentContext& getGpsFileParserContext(void);
 	static CComponentContext& getCdContext(void);
 	static CComponentContext& getInputContext(void);
 	static CComponentContext& getContext(Component_Index Index);
+
+	static void createAdminDC(Int8*);
+	static void createMDispDC(Int8*);
+	static void createHMIDC(Int8*);
+	static void createGLDC(Int8*);
+	static void createTunerDC(Int8*);
+	static void createNaviDC(Int8*);
+	static void createGpsDC(Int8*);
+	static void createGpsFileParserDC(Int8*);
+	static void createCdDC(Int8*);
+	static void createInputDC(Int8*);
 
 	static const Int32 ADMIN_STACK_SIZE;
 	static const Int32 MDISP_STACK_SIZE;
@@ -129,6 +144,7 @@ class CContext
 	static const Int32 TUNER_STACK_SIZE;
 	static const Int32 NAVI_STACK_SIZE;
 	static const Int32 GPS_STACK_SIZE;
+	static const Int32 GPSFILEPARSER_STACK_SIZE;
 	static const Int32 CD_STACK_SIZE;
 	static const Int32 INPUT_STACK_SIZE;
 	static const Int32 DEFAULT_STACK_SIZE;
@@ -140,6 +156,7 @@ class CContext
 	static const CThread::EPriority TUNER_PRIORITY;
 	static const CThread::EPriority NAVI_PRIORITY;
 	static const CThread::EPriority GPS_PRIORITY;
+	static const CThread::EPriority GPSFILEPARSER_PRIORITY;
 	static const CThread::EPriority CD_PRIORITY;
 	static const CThread::EPriority INPUT_PRIORITY;
 	static const CThread::EPriority DEFAULT_PRIORITY;
@@ -151,6 +168,7 @@ class CContext
 	static const Int32 TUNER_AFFINITY;
 	static const Int32 NAVI_AFFINITY;
 	static const Int32 GPS_AFFINITY;
+	static const Int32 GPSFILEPARSER_AFFINITY;
 	static const Int32 CD_AFFINITY;
 	static const Int32 INPUT_AFFINITY;
 	static const Int32 DEFAULT_AFFINITY;

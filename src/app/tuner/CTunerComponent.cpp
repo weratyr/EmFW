@@ -53,13 +53,4 @@ void CTunerComponent::run(void)
 void CTunerComponent::handleMessage(const CMessage& msg)
 {
 	DEBUG_PRINT("%s handle message", mContext.getContextNamePtr());
-
-	CMessage msg2(CMessage::Key_Event_Type);
-								msg2.setSenderID(HMI_INDEX);
-								msg2.setReceiverID(OpenGL_INDEX);
-								Int8* text = (Int8*) "TUNER Bereit";
-								msg2.setParam4(text, strlen((char*) text));
-								msg2.setOpcode(msg.getOpcode());
-								CContext::getMDispContext().getNormalQueue().add(msg2, false);
-
 }

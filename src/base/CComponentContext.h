@@ -127,7 +127,8 @@ class CComponentContext
                                                    Int32 normalQueueSize,
                                                    Int32 systemQueueSize,
                                                    Int32 internalqueueSize,
-                                                   Int32 DCSize
+                                                   Int32 DCSize,
+                                                   void (*createDC)(Int8*)
                                                    );
    /**
     * constructor - private to avoid misuse

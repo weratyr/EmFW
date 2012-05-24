@@ -46,7 +46,11 @@
    #include "CMessage.h"
 #endif
 
-#ifndef CGPSDATACONTAINERACCESSOR_H_
+#ifndef CGPSDATACONTAINERADAPTER_H_
+	#include "CGpsDataContainerAdapter.h"
+#endif
+
+#ifndef CGPSDATACONTAINERSCCESSOR_H_
 	#include "CGpsDataContainerAccessor.h"
 #endif
 
@@ -54,21 +58,8 @@
 	#include "Events.h"
 #endif
 
-#ifndef _CGPSSYSTEM_H
-	#include "CGpsSystem.h"
-#endif
-
-#ifdef TARGET_D1
-	#include "CGpsSystemQnxSh4.h"
-	#define GPS_DEVICE "/dev/navi/sensor/GPS/AllGps"
-#else
-	#include "CGpsSystemNMEA.h"
-	#ifdef __linux__
-		#define GPS_DEVICE "/dev/ttyACM0" //u-blox5
-		//#define GPS_DEVICE "/dev/ttyUSB0" //SiRF Star III
-	#else //Qnx_x86
-		#define GPS_DEVICE "/dev/ser2"
-	#endif
+#ifndef CGPSNMEAPARSER_H
+	#include "CGpsNMEAParser.h"
 #endif
 
 #include <stdio.h>
@@ -90,12 +81,9 @@ public:
 
 private:
   void sendPositionMessage();
-  void updateGpsDC();
 
-  static CGpsSystem* sGpsSystem;
-  const char* mDevice;
-  CGpsDataContainerAccessor mGpsDCAccessor;
-  GpsData mGpsData;
+  CGpsDataContainerAdapter mGpsDCAccessor;
+  CGpsNMEAParser mGpsNMEAParser;
 };
 
 #endif /* CGPSCOMPONENT_H_ */

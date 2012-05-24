@@ -58,16 +58,28 @@
 	#include "CGpsComponent.h"
 #endif
 
+#ifndef CGPSFILEPARSERCOMPONENT_H_
+	#include "CGpsFileParserComponent.h"
+#endif
+
 #ifndef _CCDCOMPONENT_H
 	#include "CCdComponent.h"
 #endif
 
-#ifndef _H_CMAINDISPATCHER
-	#include "CMainDispatcher.h"
-#endif
-
 #ifndef _CINPUTCOMPONENT_H
 	#include "CInputComponent.h"
+#endif
+
+#ifndef _CMINICOMDRIVER_H
+	#include "CMiniComDriver.h"
+#endif
+
+#ifndef _CKEYBOARDCAPTURETHREAD_H
+	#include "CKeyboardCaptureThread.h"
+#endif
+
+#ifndef _H_CMAINDISPATCHER
+	#include "CMainDispatcher.h"
 #endif
 
 #include <signal.h>

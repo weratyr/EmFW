@@ -35,7 +35,19 @@ CMiniComDriver::~CMiniComDriver() {
 		delete mMiniCom;
 }
 
-void CMiniComDriver::run()
-{
+void CMiniComDriver::run(void) {
 	mMiniCom->run();
+}
+
+void CMiniComDriver::stop(void) {
+	mMiniCom->stop();
+}
+
+void CMiniComDriver::reRun(void) {
+	stop();
+	run();
+}
+
+void CMiniComDriver::handleMessage(const CMessage& msg) {
+	DEBUG_PRINT("not impelemnted yet")
 }

@@ -25,6 +25,20 @@
 
 #ifndef _GLOBAL_H
 #define _GLOBAL_H
+
+/*
+ * global definitions for navigation map-viewer
+ */
+#define  NODEARRAYSIZE 1024*1024*795			//253
+#define  WAYARRAYSIZE 1024*1024*65
+
+extern char * g_WayArrayPath;
+
+#define TILEPATH "/home/groups/LabDisk/ICM/embeddedFrameworks_SS12/OSM_Hessen_20_2_2012/Tiles"
+#define WAYPATH "/home/groups/LabDisk/ICM/embeddedFrameworks_SS12/OSM_Hessen_20_2_2012/Ways"
+#define SORTEDTILEPATH "/home/groups/LabDisk/ICM/embeddedFrameworks_SS12/OSM_Hessen_20_2_2012/Sorted-Tiles"
+
+#define GPS_CAN_LOGFILE "/home/groups/LabDisk/ICM/embeddedFrameworks_SS12/gps_aufzeichnung_darmstadt_2011_05_31_11_53_47_gps_signal_fixed.log"
 /**
  *
  * This file contains the common elementar data types used in the
@@ -87,8 +101,8 @@ typedef unsigned int       UInt32;
  * this defines maximum size of an OpenGL-Window,
  * values actually from Qnx-target D1
  */
-#define WINDOW_WIDTH	800 // [pixel]
-#define WINDOW_HEIGHT	480 // [pixel]
+#define WINDOW_WIDTH	800//1024 // [pixel]
+#define WINDOW_HEIGHT	480//768 // [pixel]
 
 #endif  // _GLOBAL_H
 

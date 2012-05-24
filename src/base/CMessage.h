@@ -236,17 +236,6 @@ inline void CMessage::setParam4(Int8* byteArrayPtr, Int8 len)
 	}
 }
 
-//inline void CMessage::setParam4(Int8* byteArrayPtr)
-//{
-//	Int32 i= 0;
-//	for( ; i<len && i<39; i++){
-//		theMessage.appMsg.parameter4[i]=byteArrayPtr[i];
-//	}
-//	for(i=len; i<39; i++){
-//		theMessage.appMsg.parameter4[i]=0;
-//	}
-//}
-
 inline void CMessage::setMessageHandlerPtr(IMessageHandler* handlerPtr)
 {
 	theMessage.appMsg.mMessageHandlerPtr = handlerPtr;

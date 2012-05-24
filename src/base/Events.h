@@ -39,7 +39,6 @@ enum
 	LOCK_TYPE,
 	UNLOCK_TYPE,
 
-
 	//TUNER
 	GET_CURRENT_STATION, //Anfrage nach dem aktuellen Sender
 	GET_CURRENT_FREQUENCY, // Anfrage nach der aktuellen Frequenz

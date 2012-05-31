@@ -33,7 +33,7 @@ Int32 CGpsNMEAParser::parseGPS(const char* msg, GpsData& result) {
 	}
 	switch(type) {
 		case RMC :
-			DEBUG_PRINT("parseRMC");
+			//DEBUG_PRINT("parseRMC");
 			retVal = parseRMC(msg,result);
 			break;
 		case GGA :

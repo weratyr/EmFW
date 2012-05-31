@@ -83,6 +83,7 @@ void COpenGLComponent::init()
 	/*
 	 * init mapViewer object
 	 */
+	//CPosition myPosition (8647018, 49859128);
 	CPosition myPosition (49.86, 8.6514);	// darmstadt      ueberschreiben der Default Position
     mMapViewer->setPosition(myPosition);
 }

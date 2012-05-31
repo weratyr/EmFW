@@ -54,14 +54,17 @@ void CGpsFileParserComponent::run(void) {
 		 */
 
 		//--- Parse GPS Daten
-		GpsData gpsdata;
-		timeval aTimestamp;
-		parseGpsData(gpsdata, readBuffer, GPS_DATA_BUFFER_SIZE, aTimestamp);
-		//--- in DC schreiben
-		//DEBUG_PRINT("--- GPSDATA: Longitude: %d, Latitude: %d", gpsdata.longitude, gpsdata.latitude);
-		mGpsDCAccessor.setActualGpsData(gpsdata);
-		mGpsDCAccessor.releaseNextGpsData();
-
+		if(strcmp(type, "GPS") == 0) {
+			GpsData gpsdata;
+			timeval aTimestamp;
+			if(parseGpsData(gpsdata, &readBuffer[22], writePos-22, aTimestamp) == 0) {
+				//--- in DC schreiben
+				//DEBUG_PRINT("--- PARSER: Longitude: %d, Latitude: %d", gpsdata.longitude, gpsdata.latitude);
+				mGpsDCAccessor.setActualGpsData(gpsdata);
+				mGpsDCAccessor.releaseNextGpsData();
+				CThread::sleep(500);
+			}
+		}
 		//--- Signalisierung
 //		CMessage msg(CMessage::Internal_App_Type);
 //		msg.setSenderID(GPS_INDEX);
@@ -94,7 +97,7 @@ Int32 CGpsFileParserComponent::parseGpsData(GpsData& gpsdata,char* mReadbuffer,
 		}
 		pLineStart = pLineEnd+1;
 		pLineEnd = strchr(pLineStart,'\n');
-		DEBUG_PRINT("%s",line);
+		//DEBUG_PRINT("%s",line);
 		if(mGpsNMEAParser.parseGPS(line,gpsdata)) {
 			retval = 0;
 		} else {

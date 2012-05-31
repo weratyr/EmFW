@@ -37,7 +37,7 @@ CGpsDataContainer::~CGpsDataContainer() {
 void CGpsDataContainer::init(){
 	DEBUG_PRINT("entered");
 	mGpsWriteSemaphore.give();	// Ersten Wert schreiben lassen
-	mGpsReadSemaphore.give();	// "Vergessen"
+
 }
 
 /*
@@ -49,8 +49,7 @@ void CGpsDataContainer::init(){
 void CGpsDataContainer::setGpsData(const GpsData& gpsdata){
 	//DEBUG_PRINT("--- Take Write Sempahore --- SET");
 	mGpsWriteSemaphore.take(true);
-	//DEBUG_PRINT("--- Take Read Sempahore --- SET");
-	mGpsReadSemaphore.take(true);
+
 	//DEBUG_PRINT("--- Memcopy SET GPS DATA");
 	memcpy(&mGpsData, &gpsdata,sizeof(GpsData));
 	//DEBUG_PRINT("--- Give Read Sempahore --- SET");
@@ -69,9 +68,8 @@ void CGpsDataContainer::getGpsData(GpsData& gpsdata){
 	memcpy(&gpsdata, &mGpsData,sizeof(GpsData));
 	//DEBUG_PRINT("--- Give Write Sempahore --- GET");
 	mGpsWriteSemaphore.give();
-	//DEBUG_PRINT("--- Give Read Sempahore --- GET");
-	mGpsReadSemaphore.give();
 }
+
 
 /*
  * TODO:

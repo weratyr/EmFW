@@ -39,6 +39,8 @@ extern char * g_WayArrayPath;
 #define SORTEDTILEPATH "/home/groups/LabDisk/ICM/embeddedFrameworks_SS12/OSM_Hessen_20_2_2012/Sorted-Tiles"
 
 #define GPS_CAN_LOGFILE "/home/groups/LabDisk/ICM/embeddedFrameworks_SS12/gps_aufzeichnung_darmstadt_2011_05_31_11_53_47_gps_signal_fixed.log"
+
+//#define GPS_CAN_LOGFILE "/home/groups/LabDisk/ICM/embeddedFrameworks_SS12/gps_aufzeichnung_karlsruhe_2011_06_01_06_55_32.log"
 /**
  *
  * This file contains the common elementar data types used in the

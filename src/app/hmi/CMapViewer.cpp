@@ -72,6 +72,9 @@ void CMapViewer::Draw()
 		while ( m_Parser.GetPosition(myPosition) )
 		{
 			glVertex3f(myPosition.getLongitude(),myPosition.getLatitude(),-30.0);
+			//DEBUG_PRINT("--- MYPOSITION: Longitude: %f, Latitude: %f", myPosition.getLongitude(), myPosition.getLatitude());
+
+
 		}
 		glEnd();
 	} while (m_Parser.GetNextWay());
@@ -116,12 +119,11 @@ void CMapViewer::Draw()
 	 * Die Werte aus dem Datencontainer können ohne Umrechnung gezeichnet werden.
 	 */
 
-	GpsData gpsdata;
-	mGpsDCAccessor.getActualGpsData(gpsdata);
-	CPosition actualPos(gpsdata.longitude, gpsdata.latitude);
-	setPosition(actualPos);
-	//DEBUG_PRINT("--- GPSDATA: Longitude: %d, Latitude: %d", gpsdata.longitude, gpsdata.latitude);
-	DrawPoint(m_CurrentPosition.getLongitude(), m_CurrentPosition.getLatitude(), 0.0);
+
+	m_CurrentPosition.setLatitude(mGpsDCAccessor.getLatitude());
+	m_CurrentPosition.setLongitude(mGpsDCAccessor.getLongitude());
+	//DEBUG_PRINT("--- GPSDATA 2: Longitude: %f, Latitude: %f", m_CurrentPosition.getLongitude(), m_CurrentPosition.getLatitude());
+	DrawPoint((float)m_CurrentPosition.getLongitude(),(float)m_CurrentPosition.getLatitude(), -20.0);
 }
 
 
@@ -131,7 +133,10 @@ void CMapViewer::DrawPoint(float x,float y,float z)
 #ifdef LINUX
   glPointSize(10.0);
   glBegin(GL_POINTS);
-    glColor4f(1,0,0, 0.5);//red
+    glColor4f(0,0,1, 0.5);//red
+
+    //DEBUG_PRINT("x: %f, y: %f, z: %f", x, y, z);
+
     glVertex3f(x,y,z);
   glEnd();
 

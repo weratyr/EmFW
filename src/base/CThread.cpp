@@ -101,7 +101,7 @@ void bindToCPU(Int32 cpu, const char* name)
 	    RMSK_SET(cpu, imaskp);
 
 
-	if ( ThreadCtl( _NTO_TCTL_RUNMASK_GET_AND_SET_INHERIT,
+	if ( ThreadCtl( _NTO_TCTL_RUNMASK_GET_AND_SET,
 	                   my_data) == -1) {
 	        DEBUG_PRINT("Thread Control Start-Error ---------------");
 	    }
@@ -250,8 +250,6 @@ void CThread::start(void)
 
    		// set main thread's affinity
    		//...
-		// bind to cpu
-		bindToCPU(mAffinity, mName);
 
    		run();
    }

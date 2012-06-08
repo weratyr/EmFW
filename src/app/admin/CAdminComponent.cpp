@@ -165,6 +165,15 @@ void CAdminComponent::init(void)
 
 
 
+	} else if ((mProcessIDs[TRACER_INDEX] = fork()) == 0)
+	{
+		//CTracerComponent tracer;
+		CTracerComponent tracer(CContext::getTracerContext());
+		CThread CTracerComponent_thread(tracer,
+				CContext::getTracerContext().getContextNamePtr(),
+				CContext::TRACER_STACK_SIZE, CContext::TRACER_PRIORITY,
+				CContext::TRACER_AFFINITY, true);
+		CTracerComponent_thread.start();
 	}
 	DEBUG_PRINT("creation of components done");
 

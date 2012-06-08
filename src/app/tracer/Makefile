@@ -23,23 +23,15 @@
 #  limitations under the License.
 ############################################################################
 ###############################################################################
-# makefile for all icm components                                             #
-#                                                                             #
-# for each subdirectory within the current directory it is assumed            #
-# it contains software compontents implementing parts of the application      #
-# logic                                                                       #
+# makefile to build the Tracer                                      #
 ###############################################################################
 
-OBJS    = $$BINDIR/CContext.o
-SUBDIRS = navi main_dispatcher gps admin hmi cd input tuner tracer socket
+OBJS = $$BINDIR/CTracerComponent.o 
 
-include $(PROJECT_ROOT)/src/buildmacros.mk 
 include $(PROJECT_ROOT)/src/componenttargets.mk
 
-### main targets ###
+all: build_objs
 
-all: build_objs all_subdirs
-
-clean: clean_objs clean_subdirs
+clean: clean_objs
 
 ## eof ##

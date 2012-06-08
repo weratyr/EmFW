@@ -78,6 +78,7 @@ enum Component_Index
 	GPS_INDEX,
 	CD_INDEX,
 	INPUT_INDEX,
+	TRACER_INDEX,
 	/**
 	 * Hinweis:
 	 * Das hat immer als letzter Eintrag nach den adressierbaren
@@ -120,6 +121,7 @@ class CContext
 	static CComponentContext& getGpsContext(void);
 	static CComponentContext& getCdContext(void);
 	static CComponentContext& getInputContext(void);
+	static CComponentContext& getTracerContext(void);
 	static CComponentContext& getContext(Component_Index Index);
 
 	static const Int32 ADMIN_STACK_SIZE;
@@ -131,6 +133,7 @@ class CContext
 	static const Int32 GPS_STACK_SIZE;
 	static const Int32 CD_STACK_SIZE;
 	static const Int32 INPUT_STACK_SIZE;
+	static const Int32 TRACER_STACK_SIZE;
 	static const Int32 DEFAULT_STACK_SIZE;
 
 	static const CThread::EPriority ADMIN_PRIORITY;
@@ -142,6 +145,7 @@ class CContext
 	static const CThread::EPriority GPS_PRIORITY;
 	static const CThread::EPriority CD_PRIORITY;
 	static const CThread::EPriority INPUT_PRIORITY;
+	static const CThread::EPriority TRACER_PRIORITY;
 	static const CThread::EPriority DEFAULT_PRIORITY;
 
 	static const Int32 ADMIN_AFFINITY;
@@ -153,6 +157,7 @@ class CContext
 	static const Int32 GPS_AFFINITY;
 	static const Int32 CD_AFFINITY;
 	static const Int32 INPUT_AFFINITY;
+	static const Int32 TRACER_AFFINITY;
 	static const Int32 DEFAULT_AFFINITY;
 
 

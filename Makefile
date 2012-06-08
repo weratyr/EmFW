@@ -87,8 +87,8 @@ ifeq ($(TARGET), QNX_X86)
 
 	CC 		= $(QNX_HOST)/usr/bin/QCC
 	LD 		= $(QNX_HOST)/usr/bin/QCC
-	LIBS		= -lgf -lGLES_CM $(ICM_ENV)/qnx$(QNX_VERSION)/lib/libfreetype.a -lz 
-	CFLAGS		+= -Vgcc_ntox86 -Y_ecpp-ne -DQNX -DEGL $(DEBUGFLAGS)
+	LIBS		= -lgf -lGLES_CM $(ICM_ENV)/qnx$(QNX_VERSION)/lib/libfreetype.a -lz -lsocket 
+	CFLAGS		+= -Vgcc_ntox86 -DQNX -DEGL $(DEBUGFLAGS)
 	LDFLAGS		= $(DEBUGFLAGS) $(BUILDTYPE)
 	INCLUDES	= $(COMMON_INCLUDES) -I$(ICM_ENV)/qnx$(QNX_VERSION)/include
 endif # QNX_X86

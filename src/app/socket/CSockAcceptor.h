@@ -1,5 +1,5 @@
 /***************************************************************************
- *  openICM-application
+ *  openICM-framework
  ***************************************************************************
  *  Copyright 2010 Joachim Wietzke and Manh Tien Tran
  *
@@ -22,38 +22,41 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
 *****************************************************************************/
+#ifndef _CSOCKACCEPTOR_H_
+#define _CSOCKACCEPTOR_H_
 
-#include "CContainer.h"
+#ifndef _CINETADDR_H_
+	#include "CInetAddr.h"
+#endif
 
-// TODO prio 3 :: hier fehlt der CTOR (jowi)
-class CTunerDataContainer: public CContainer
+#ifndef _CSOCKSTREAM_H_
+	#include "CSockStream.h"
+#endif
+
+#include <sys/socket.h>
+#include <sys/select.h>
+#include <sys/types.h>
+
+#include <iostream>
+using namespace std;
+
+
+class CSockAcceptor
 {
 public:
-	// alternativ: Methoden mit Parameter
-	bool isPSNameValid(void);
-	bool isFreqValid(void);
-	bool isPIValid(void);
-	const char * getPSName(void);
-	const Int32 getFreq(void);
-	const Int32 getPI(void);
+	CSockAcceptor();
+	~CSockAcceptor();
+
+	/**
+	 * Initialize CInetAddr listen passively
+	 */
+	bool open(CInetAddr& address);
+
+	/**
+	 * Init CSockStream with a new client connection
+	 */
+	bool accept(CSockStream& stream, Int8 timeout=0);
 private:
-
-	// alternative - Method mit Parameter
-	void validatePSName(void);
-	void validateFreq(void);
-	void validatePI(void);
-	void setPSName(const char * psName);
-	void setFreq(Int32 freq);
-	void setPI(Int32 pi);
-
-
-	// alternativ Flag!
-	bool mPSNameValid;
-	bool mFreqValid;
-	bool mPIValid;
-	char mPSName[9];
-	Int32 mFreq;
-	Int32 mPI;
-	CMutex mMutex;
+	Int32 mListenfd;
 };
-
+#endif //_CSOCKACCEPTOR_H_

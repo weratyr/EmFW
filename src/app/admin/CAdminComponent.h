@@ -70,6 +70,10 @@
 	#include "CInputComponent.h"
 #endif
 
+#ifndef _CTRACERCOMPONENT_H
+	#include "CTracerComponent.h"
+#endif
+
 #include <signal.h>
 #include <unistd.h>
 

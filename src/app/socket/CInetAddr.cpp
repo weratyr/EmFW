@@ -1,5 +1,5 @@
 /***************************************************************************
- *  openICM-application
+ *  openICM-framework
  ***************************************************************************
  *  Copyright 2010 Joachim Wietzke and Manh Tien Tran
  *
@@ -22,38 +22,37 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
 *****************************************************************************/
+#include "CInetAddr.h"
 
-#include "CContainer.h"
-
-// TODO prio 3 :: hier fehlt der CTOR (jowi)
-class CTunerDataContainer: public CContainer
+CInetAddr::CInetAddr()
 {
-public:
-	// alternativ: Methoden mit Parameter
-	bool isPSNameValid(void);
-	bool isFreqValid(void);
-	bool isPIValid(void);
-	const char * getPSName(void);
-	const Int32 getFreq(void);
-	const Int32 getPI(void);
-private:
 
-	// alternative - Method mit Parameter
-	void validatePSName(void);
-	void validateFreq(void);
-	void validatePI(void);
-	void setPSName(const char * psName);
-	void setFreq(Int32 freq);
-	void setPI(Int32 pi);
+}
 
+CInetAddr::~CInetAddr()
+{
 
-	// alternativ Flag!
-	bool mPSNameValid;
-	bool mFreqValid;
-	bool mPIValid;
-	char mPSName[9];
-	Int32 mFreq;
-	Int32 mPI;
-	CMutex mMutex;
-};
+}
 
+bool CInetAddr::set(UInt16 port, const char * address)
+{
+	memset(&mInetAddr, sizeof(mInetAddr),0);
+	mInetAddr.sin_family = AF_INET;
+	mInetAddr.sin_port = htons(port);
+
+	if (inet_aton(address, &mInetAddr.sin_addr) <= 0)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool CInetAddr::set(UInt16 port)
+{
+	memset(&mInetAddr, sizeof(mInetAddr), 0);
+	mInetAddr.sin_family = AF_INET;
+	mInetAddr.sin_port = htons(port);
+	mInetAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	return true;
+}

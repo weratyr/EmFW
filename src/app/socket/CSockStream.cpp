@@ -1,5 +1,5 @@
 /***************************************************************************
- *  openICM-application
+ *  openICM-framework
  ***************************************************************************
  *  Copyright 2010 Joachim Wietzke and Manh Tien Tran
  *
@@ -22,38 +22,46 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
 *****************************************************************************/
+#include "CSockStream.h"
 
-#include "CContainer.h"
-
-// TODO prio 3 :: hier fehlt der CTOR (jowi)
-class CTunerDataContainer: public CContainer
+CSockStream::CSockStream() : mSocket(0)
 {
-public:
-	// alternativ: Methoden mit Parameter
-	bool isPSNameValid(void);
-	bool isFreqValid(void);
-	bool isPIValid(void);
-	const char * getPSName(void);
-	const Int32 getFreq(void);
-	const Int32 getPI(void);
-private:
+	/**
+	* We need to ignore this signal, otherwise we won't receive and error from <code> send </code> when the
+	* connection is closed but instead the process would be terminated.
+	*/
+	signal( SIGPIPE, SIG_IGN );
+}
 
-	// alternative - Method mit Parameter
-	void validatePSName(void);
-	void validateFreq(void);
-	void validatePI(void);
-	void setPSName(const char * psName);
-	void setFreq(Int32 freq);
-	void setPI(Int32 pi);
+CSockStream::~CSockStream() {}
 
+const Int32 CSockStream::read(UInt8 * bufferPtr, const UInt32 size)
+{
+	return ::read( mSocket, bufferPtr, size );
+}
 
-	// alternativ Flag!
-	bool mPSNameValid;
-	bool mFreqValid;
-	bool mPIValid;
-	char mPSName[9];
-	Int32 mFreq;
-	Int32 mPI;
-	CMutex mMutex;
-};
+const Int32 CSockStream::write(const UInt8* const bufferPtr, const UInt32 size)
+{
+	return ::write( mSocket, bufferPtr, size );
+}
 
+const Int32 CSockStream::write(const CMessage* const messageBufferPtr, const UInt32 size)
+{
+	return ::write(mSocket, messageBufferPtr, size);
+}
+
+const Int32 CSockStream::read ( CMessage* messageBufferPtr, const UInt32 size )
+{
+	return ::read(mSocket, messageBufferPtr, size);
+}
+
+void CSockStream::flush(void)
+{
+	// todo
+}
+
+void CSockStream::close()
+{
+	::close(mSocket);
+	mSocket = 0;
+}

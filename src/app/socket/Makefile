@@ -23,23 +23,19 @@
 #  limitations under the License.
 ############################################################################
 ###############################################################################
-# makefile for all icm components                                             #
-#                                                                             #
-# for each subdirectory within the current directory it is assumed            #
-# it contains software compontents implementing parts of the application      #
-# logic                                                                       #
+# makefile to build the tuner component                                       #
 ###############################################################################
 
-OBJS    = $$BINDIR/CContext.o
-SUBDIRS = navi main_dispatcher gps admin hmi cd input tuner tracer socket
+OBJS = $$BINDIR/IIOStream.o \
+  $$BINDIR/CSockAcceptor.o \
+  $$BINDIR/CSockConnector.o \
+  $$BINDIR/CSockStream.o \
+  $$BINDIR/CInetAddr.o 
 
-include $(PROJECT_ROOT)/src/buildmacros.mk 
 include $(PROJECT_ROOT)/src/componenttargets.mk
 
-### main targets ###
+all: build_objs
 
-all: build_objs all_subdirs
-
-clean: clean_objs clean_subdirs
+clean: clean_objs
 
 ## eof ##

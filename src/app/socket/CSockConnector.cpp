@@ -1,5 +1,5 @@
 /***************************************************************************
- *  openICM-application
+ *  openICM-framework
  ***************************************************************************
  *  Copyright 2010 Joachim Wietzke and Manh Tien Tran
  *
@@ -22,38 +22,35 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
 *****************************************************************************/
+#include "CSockConnector.h"
 
-#include "CContainer.h"
-
-// TODO prio 3 :: hier fehlt der CTOR (jowi)
-class CTunerDataContainer: public CContainer
+CSockConnector::CSockConnector()
 {
-public:
-	// alternativ: Methoden mit Parameter
-	bool isPSNameValid(void);
-	bool isFreqValid(void);
-	bool isPIValid(void);
-	const char * getPSName(void);
-	const Int32 getFreq(void);
-	const Int32 getPI(void);
-private:
 
-	// alternative - Method mit Parameter
-	void validatePSName(void);
-	void validateFreq(void);
-	void validatePI(void);
-	void setPSName(const char * psName);
-	void setFreq(Int32 freq);
-	void setPI(Int32 pi);
+}
 
+/**
+ * \brief used to cleanup the windows socket(s)
+ */
+CSockConnector::~CSockConnector()
+{
 
-	// alternativ Flag!
-	bool mPSNameValid;
-	bool mFreqValid;
-	bool mPIValid;
-	char mPSName[9];
-	Int32 mFreq;
-	Int32 mPI;
-	CMutex mMutex;
-};
+}
 
+bool CSockConnector::connect(CSockStream& stream, CInetAddr& address, bool block)
+{
+	int sockfd;
+
+	if((sockfd = socket(AF_INET, SOCK_STREAM, 0 )) < 0)
+	{
+		return false;
+	}
+
+	if (::connect(sockfd, (sockaddr*) &address.mInetAddr, sizeof(address.mInetAddr)) < 0)
+	{
+		return false;
+	}
+	// save the socket filedescriptor
+	stream.mSocket = sockfd;
+	return true;
+}

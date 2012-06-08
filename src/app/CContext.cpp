@@ -41,6 +41,7 @@ const char* NAVI_COMPONENT_NAME = "NaviComponent";
 const char* GPS_COMPONENT_NAME = "GpsComponent";
 const char* CD_COMPONENT_NAME = "CdComponent";
 const char* INPUT_COMPONENT_NAME = "InputComponent";
+const char* TRACER_COMPONENT_NAME = "TracerComponent";
 
 const Int32 CContext::ADMIN_STACK_SIZE = 1000;
 const Int32 CContext::MDISP_STACK_SIZE = 1000;
@@ -52,6 +53,7 @@ const Int32 CContext::GPS_STACK_SIZE = 1000;
 const Int32 CContext::CD_STACK_SIZE = 1000;
 const Int32 CContext::INPUT_STACK_SIZE = 1000;
 const Int32 CContext::DEFAULT_STACK_SIZE = 1000;
+const Int32 CContext::TRACER_STACK_SIZE = 1000;
 
 const CThread::EPriority CContext::ADMIN_PRIORITY = CThread::PRIORITY_NORM;
 const CThread::EPriority CContext::MDISP_PRIORITY = CThread::PRIORITY_NORM;
@@ -63,6 +65,7 @@ const CThread::EPriority CContext::GPS_PRIORITY = CThread::PRIORITY_NORM;
 const CThread::EPriority CContext::CD_PRIORITY = CThread::PRIORITY_NORM;
 const CThread::EPriority CContext::INPUT_PRIORITY = CThread::PRIORITY_NORM;
 const CThread::EPriority CContext::DEFAULT_PRIORITY = CThread::PRIORITY_NORM;
+const CThread::EPriority CContext::TRACER_PRIORITY = CThread::PRIORITY_NORM;
 
 /*
  *
@@ -74,14 +77,15 @@ const CThread::EPriority CContext::DEFAULT_PRIORITY = CThread::PRIORITY_NORM;
  */
 const Int32 CContext::ADMIN_AFFINITY = 0;
 const Int32 CContext::MDISP_AFFINITY = 0;
-const Int32 CContext::HMI_AFFINITY = 1;
-const Int32 CContext::GL_AFFINITY = 1;
-const Int32 CContext::TUNER_AFFINITY = 0;
-const Int32 CContext::NAVI_AFFINITY = 0;
-const Int32 CContext::GPS_AFFINITY = 0;
-const Int32 CContext::CD_AFFINITY = 0;
-const Int32 CContext::INPUT_AFFINITY = 0;
-const Int32 CContext::DEFAULT_AFFINITY = 0;
+const Int32 CContext::HMI_AFFINITY = 2;
+const Int32 CContext::GL_AFFINITY = 2;
+const Int32 CContext::TUNER_AFFINITY = 1;
+const Int32 CContext::NAVI_AFFINITY = 1;
+const Int32 CContext::GPS_AFFINITY = 3;
+const Int32 CContext::CD_AFFINITY = 1;
+const Int32 CContext::INPUT_AFFINITY = 1;
+const Int32 CContext::DEFAULT_AFFINITY = 3;
+const Int32 CContext::TRACER_AFFINITY = 3;
 
 const Int32 ADMIN_NORMALQUEUESIZE = 100; // Number of Messages
 const Int32 MDISP_NORMALQUEUESIZE = 100;
@@ -92,6 +96,7 @@ const Int32 NAVI_NORMALQUEUESIZE = 100;
 const Int32 GPS_NORMALQUEUESIZE = 100;
 const Int32 CD_NORMALQUEUESIZE = 100;
 const Int32 INPUT_NORMALQUEUESIZE = 100;
+const Int32 TRACER_NORMALQUEUESIZE = 100;
 
 const Int32 ADMIN_SYSTEMQUEUESIZE = 100;
 const Int32 MDISP_SYSTEMQUEUESIZE = 100;
@@ -102,6 +107,7 @@ const Int32 NAVI_SYSTEMQUEUESIZE = 100;
 const Int32 GPS_SYSTEMQUEUESIZE = 100;
 const Int32 CD_SYSTEMQUEUESIZE = 100;
 const Int32 INPUT_SYSTEMQUEUESIZE = 100;
+const Int32 TRACER_SYSTEMQUEUESIZE = 100;
 
 const Int32 ADMIN_INTERNALQUEUESIZE = 4;
 const Int32 MDISP_INTERNALQUEUESIZE = 4;
@@ -112,6 +118,7 @@ const Int32 NAVI_INTERNALQUEUESIZE = 4;
 const Int32 GPS_INTERNALQUEUESIZE = 4;
 const Int32 CD_INTERNALQUEUESIZE = 4;
 const Int32 INPUT_INTERNALQUEUESIZE = 4;
+const Int32 TRACER_INTERNALQUEUESIZE = 4;
 
 const Int32 ADMIN_DCSIZE = 0;
 const Int32 MDISP_DCSIZE = 0;
@@ -122,6 +129,7 @@ const Int32 NAVI_DCSIZE = 0; // das wird ersetzt, wenn die Containter eingefuehr
 const Int32 GPS_DCSIZE = MAKE_ALIGNMENT_SIZE(sizeof(CGpsDataContainer));
 const Int32 CD_DCSIZE = 0;
 const Int32 INPUT_DCSIZE = 0;
+const Int32 TRACER_DCSIZE = 0;
 
 //watchdog limits
 const Int32 ADMIN_WDLIMIT = 2;
@@ -133,6 +141,7 @@ const Int32 NAVI_WDLIMIT = 2;
 const Int32 GPS_WDLIMIT = 2;
 const Int32 CD_WDLIMIT = 2;
 const Int32 INPUT_WDLIMIT = 2;
+const Int32 TRACER_WDLIMIT = 2;
 
 //  Groessenberechnungen durch den Compiler
 #define HEADER_SIZE  (MAKE_ALIGNMENT_SIZE((sizeof(CBinarySemaphore))))
@@ -169,10 +178,13 @@ enum
 	INPUT_CONTEXT_SIZE = HEADER_SIZE + QUEUE_SIZE(INPUT_NORMALQUEUESIZE)
 			+ QUEUE_SIZE(INPUT_SYSTEMQUEUESIZE) + QUEUE_SIZE(INPUT_INTERNALQUEUESIZE)
 			+ INPUT_DCSIZE,
+	TRACER_CONTEXT_SIZE = HEADER_SIZE + QUEUE_SIZE(TRACER_NORMALQUEUESIZE)
+	+ QUEUE_SIZE(TRACER_SYSTEMQUEUESIZE) + QUEUE_SIZE(TRACER_INTERNALQUEUESIZE)
+	+ TRACER_DCSIZE,
 
 	TOTAL_SIZE = ADMIN_CONTEXT_SIZE + MDISP_CONTEXT_SIZE + HMI_CONTEXT_SIZE
 			+ GL_CONTEXT_SIZE + TUNER_CONTEXT_SIZE + NAVI_CONTEXT_SIZE
-			+ GPS_CONTEXT_SIZE + CD_CONTEXT_SIZE + INPUT_CONTEXT_SIZE
+			+ GPS_CONTEXT_SIZE + CD_CONTEXT_SIZE + INPUT_CONTEXT_SIZE + TRACER_CONTEXT_SIZE
 };
 
 static const CContextDescription sDescriptionTable[] =
@@ -208,7 +220,10 @@ static const CContextDescription sDescriptionTable[] =
 		CD_INTERNALQUEUESIZE, CD_DCSIZE, CD_WDLIMIT, CD_CONTEXT_SIZE },
 { INPUT_INDEX, INPUT_COMPONENT_NAME, CContext::INPUT_AFFINITY, CContext::INPUT_STACK_SIZE,
 				CContext::INPUT_PRIORITY, INPUT_NORMALQUEUESIZE, INPUT_SYSTEMQUEUESIZE,
-				INPUT_INTERNALQUEUESIZE, INPUT_DCSIZE, INPUT_WDLIMIT, INPUT_CONTEXT_SIZE }
+				INPUT_INTERNALQUEUESIZE, INPUT_DCSIZE, INPUT_WDLIMIT, INPUT_CONTEXT_SIZE },
+{ TRACER_INDEX, TRACER_COMPONENT_NAME, CContext::TRACER_AFFINITY, CContext::TRACER_STACK_SIZE,
+	CContext::TRACER_PRIORITY, TRACER_NORMALQUEUESIZE, TRACER_SYSTEMQUEUESIZE,
+	TRACER_INTERNALQUEUESIZE, TRACER_DCSIZE, TRACER_WDLIMIT, TRACER_CONTEXT_SIZE }
 };
 
 CComponentContext CContext::sContextTable[NUM_OF_COMPONENTS]; // wg. static
@@ -289,6 +304,11 @@ CComponentContext& CContext::getCdContext(void)
 CComponentContext& CContext::getInputContext(void)
 {
 	return sContextTable[INPUT_INDEX];
+}
+
+CComponentContext& CContext::getTracerContext(void)
+{
+	return sContextTable[TRACER_INDEX];
 }
 
 CComponentContext& CContext::getContext(Component_Index Index)

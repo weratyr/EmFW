@@ -39,6 +39,7 @@ class CTracerComponent: public AComponentBase
 
    virtual void init(void) ;
    virtual void run(void);
+   void connect_and_read();
 
    virtual void handleMessage(const CMessage& msg);
 

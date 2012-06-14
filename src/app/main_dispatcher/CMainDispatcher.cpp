@@ -134,4 +134,5 @@ void CMainDispatcher::handleKeyMessage(const CMessage& msg)
 
 	CContext::getContext(ID).getNormalQueue().add(msg, true); // send out
 	//DEBUG_PRINT("Key MSG  : ID %i -- %i   - ------ - - - --", ID, id);
+	CContext::getContext(TRACER_INDEX).getNormalQueue().add(msg, true);
 }

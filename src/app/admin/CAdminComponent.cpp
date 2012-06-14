@@ -213,14 +213,14 @@ void CAdminComponent::run(void)
 			 */
 
 			// e.g. switch to tuner panel after 7 seconds (only works if open gl is running)
-			/*
-			sleep(7);
+
+			sleep(2);
 			CMessage msg(CMessage::Key_Event_Type);
 			msg.setSenderID(ADMIN_INDEX);
 			msg.setReceiverID(HMI_INDEX);
 			msg.setOpcode(TUNER_KEY);
 			CContext::getMDispContext().getNormalQueue().add(msg, false); // send out
-			sleep(3);
+			sleep(2);
 
 			DEBUG_PRINT("ADMIN: switched to Tuner done................ now Cd!!!!!!!!!!!!!");
 			CMessage msg2(CMessage::Key_Event_Type);
@@ -228,15 +228,36 @@ void CAdminComponent::run(void)
 			msg2.setReceiverID(HMI_INDEX);
 			msg2.setOpcode(CD_KEY);
 			CContext::getMDispContext().getNormalQueue().add(msg2, false); // send out
-			sleep(3);
+			sleep(2);
 
 			CMessage msg3(CMessage::Key_Event_Type);
 			msg3.setSenderID(ADMIN_INDEX);
-			msg3.setReceiverID(HMI_INDEX);
+			msg3.setReceiverID(CD_INDEX);
 			msg3.setOpcode(TUNER_KEY);
 			CContext::getMDispContext().getNormalQueue().add(msg3, false); // send out
-			sleep(3);
-			*/
+			sleep(2);
+
+			CMessage msg4(CMessage::Key_Event_Type);
+				msg4.setSenderID(ADMIN_INDEX);
+				msg4.setReceiverID(CD_INDEX);
+				msg4.setOpcode(TUNER_KEY);
+				CContext::getMDispContext().getNormalQueue().add(msg4, false); // send out
+			sleep(2);
+
+			CMessage msg5(CMessage::Key_Event_Type);
+				msg5.setSenderID(ADMIN_INDEX);
+				msg5.setReceiverID(TUNER_INDEX);
+				msg5.setOpcode(TUNER_KEY);
+				CContext::getMDispContext().getNormalQueue().add(msg5, false); // send out
+			sleep(2);
+
+			CMessage msg6(CMessage::Key_Event_Type);
+				msg6.setSenderID(ADMIN_INDEX);
+				msg6.setReceiverID(OpenGL_INDEX);
+				msg6.setOpcode(TUNER_KEY);
+				CContext::getMDispContext().getNormalQueue().add(msg6, false); // send out
+			sleep(2);
+
 			/*
 			 * now send cyclic (3x) dummy-messages to all other components
 			 */
